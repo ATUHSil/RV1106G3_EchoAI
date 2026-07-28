@@ -168,8 +168,6 @@ docker run --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix luckfoxtech
 
 如果弹出眼睛窗口，GUI 转发正常。
 
-USB 直通验证需要实际开发板，见 [需要开发板的内容](需要开发板的内容.md)。
-
 ---
 
 ## 编译测试结果
@@ -256,7 +254,6 @@ docker-compose -f Echo-Mate/docker-compose.yml run rv1106-dev bash -c \
   "bash /project/Demo/DeskBot_demo/build_arm.sh"
 ```
 
-部署到板子见 [需要开发板的内容](需要开发板的内容.md)。
 
 **验证 ARM 构建**:
 ```bash
@@ -326,8 +323,6 @@ ARM 交叉编译涉及多个手动步骤（编译静态库、清理污染、修�
 docker-compose -f Echo-Mate/docker-compose.yml run rv1106-dev bash -c \
   "bash /project/Demo/DeskBot_demo/build_arm.sh"
 ```
-
-部署到板子见 [需要开发板的内容](需要开发板的内容.md)。
 
 脚本会自动处理：libz/libcurl/libjson-c 静态库编译、x86_64 污染库清理、json-c CMake 配置修复、交叉编译、可选部署。
 
