@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>RV1106G3_EchoAI 项目文档</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RV1106G3_EchoAI — RV1106G3 桌面显示屏 AI 助手项目文档">
+  <meta property="og:title" content="RV1106G3_EchoAI 项目文档">
+  <meta property="og:description" content="RV1106G3_EchoAI — RV1106G3 桌面显示屏 AI 助手项目文档">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://atuhsil.github.io/RV1106G3_EchoAI/">
+  <meta property="og:image" content="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/favicon.ico">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%233f51b5'/><text x='16' y='22' text-anchor='middle' font-size='20' fill='white'>AI</text></svg>">
+  <meta name="theme-color" content="#3f51b5">
+  <style>
+    :root {
+      --mkdn-accent: #0969da;
+      --mkdn-text: #1f2328;
+      --mkdn-text-muted: #656d76;
+      --mkdn-bg: #ffffff;
+      --mkdn-bg-alt: #f6f8fa;
+      --mkdn-border: #d0d7de;
+      --mkdn-link: #34495E;
+      --mkdn-link-hover: #2c3e50;
+      --mkdn-code-bg: rgba(175,184,193,0.2);
+      --mkdn-pre-bg: #f6f8fa;
+      --mkdn-sidebar-text: #333;
+      --sidebar-width: 290px;
+      --toc-width: 180px;
+    }
+
+    [data-theme="dark"] {
+      --mkdn-text: #e6edf3;
+      --mkdn-text-muted: #8b949e;
+      --mkdn-bg: #0d1117;
+      --mkdn-bg-alt: #161b22;
+      --mkdn-border: #30363d;
+      --mkdn-link: #e6edf3;
+      --mkdn-link-hover: #ffffff;
+      --mkdn-code-bg: rgba(110,118,129,0.4);
+      --mkdn-pre-bg: #161b22;
+      --mkdn-sidebar-text: #c9d1d9;
+    }
+    [data-theme="dark"] .search input[type="search"] {
+      background: var(--mkdn-bg-alt);
+      color: var(--mkdn-text);
+      border-color: var(--mkdn-border);
+    }
+    [data-theme="dark"] .search input[type="search"]::placeholder {
+      color: var(--mkdn-text-muted);
+    }
+    [data-theme="dark"] .search .results-panel {
+      background: var(--mkdn-bg-alt);
+      color: var(--mkdn-text);
+    }
+    [data-theme="dark"] .search .matching-post {
+      border-bottom-color: var(--mkdn-border);
+    }
+    [data-theme="dark"] .search .matching-post a {
+      color: var(--mkdn-text);
+    }
+    [data-theme="dark"] .sidebar-toggle,
+    [data-theme="dark"] .toc-toggle {
+      background: rgba(103,58,183,0.30);
+    }
+    [data-theme="dark"] .sidebar-toggle:hover,
+    [data-theme="dark"] .toc-toggle:hover {
+      background: rgba(103,58,183,0.45);
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      color: var(--mkdn-text);
+      background: var(--mkdn-bg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      background: var(--mkdn-bg-alt);
+      border-right: 1px solid var(--mkdn-border);
+      overflow-y: auto;
+      padding: 20px 0;
+      z-index: 200;
+      transition: transform 0.3s;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar { scrollbar-width: thin; scrollbar-color: #c1c1c1 transparent; }
+
+    body.close .sidebar { transform: translateX(-100%); }
+    body.close .main { margin-left: 0 !important; }
+
+    .sidebar-toggle {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 48px;
+      background: rgba(103,58,183,0.12);
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+      padding: 0;
+      z-index: 300;
+      transition: background 0.2s;
+    }
+    .sidebar-toggle:hover { background: rgba(103,58,183,0.22); }
+    .sidebar-toggle .sidebar-toggle-button { display: none; }
+
+    .toc-toggle {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 48px;
+      background: rgba(103,58,183,0.12);
+      border: none;
+      border-radius: 4px 0 0 4px;
+      cursor: pointer;
+      padding: 0;
+      z-index: 300;
+      transition: background 0.2s;
+    }
+    .toc-toggle:hover { background: rgba(103,58,183,0.22); }
+    body.toc-closed .toc { transform: translateX(100%); }
+    body.toc-closed .main { margin-right: 0 !important; }
+
+    .sidebar h1 { padding-left: 12px; font-size: 18px; }
+
+    .sidebar-nav { padding: 0 12px 0 32px; }
+    .sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
+    .sidebar-nav ul ul { padding-left: 16px; }
+    .sidebar-nav li {
+      margin: 12px 0;
+      font-size: 16px;
+      font-weight: 350;
+      color: var(--mkdn-sidebar-text);
+    }
+    .sidebar-nav li a {
+      display: block;
+      color: var(--mkdn-sidebar-text);
+      text-decoration: none;
+      padding: 0 20px 0 0;
+      font-weight: 350;
+    }
+    .sidebar-nav li a:hover,
+    .sidebar-nav li.active > a {
+      color: #0b85d7;
+    }
+
+    .sidebar-nav li > p:not(:has(a)) {
+      cursor: default;
+    }
+    .sidebar-nav li.closed > ul {
+      display: none;
+    }
+
+    .toc {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: var(--toc-width);
+      background: var(--mkdn-bg);
+      border-left: 1px solid var(--mkdn-border);
+      overflow-y: auto;
+      padding: 20px 12px;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
+
+    .toc h4 {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--mkdn-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 8px;
+    }
+
+    .toc ul { list-style: none; padding: 0; margin: 0; }
+    .toc li { margin: 0; }
+    .toc a {
+      display: block;
+      padding: 3px 8px;
+      font-size: 16px;
+      color: var(--mkdn-text-muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      border-radius: 4px;
+    }
+    .toc a:hover,
+    .toc .active > a {
+      color: var(--mkdn-link);
+      border-left-color: var(--mkdn-link);
+    }
+    .toc .toc-l2 a { padding-left: 16px; font-size: 12px; }
+
+    .main {
+      margin-left: var(--sidebar-width);
+      margin-right: var(--toc-width);
+      min-height: 100vh;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 48px;
+    }
+
+    .doc-index {
+      max-width: 560px;
+      margin: 60px auto;
+      padding: 0 20px;
+      line-height: 2.4;
+      font-size: 15px;
+    }
+
+    .doc-index ul { list-style: none; padding-left: 0; }
+    .doc-index li { margin: 4px 0; }
+
+    .doc-index .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mkdn-text-muted);
+      margin-top: 16px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .toc { display: none; }
+      .main { margin-left: 0; margin-right: 0; }
+      .content { padding: 20px 24px; }
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      line-height: 1.4;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+    h1 { color: var(--mkdn-text); font-size: 2em; border-bottom: 2px solid var(--mkdn-border); padding-bottom: 0.3em; margin-top: 0; }
+    h2 { color: var(--mkdn-link); font-size: 1.5em; border-bottom: 1px solid var(--mkdn-border); padding-bottom: 0.2em; }
+    h3 { color: var(--mkdn-text); font-size: 1.25em; }
+    h4 { color: var(--mkdn-text); font-size: 1.1em; }
+    h5 { color: var(--mkdn-text); font-size: 1em; }
+    h6 { color: var(--mkdn-text); font-size: 0.9em; }
+
+    p { margin: 1em 0; }
+
+    a {
+      color: var(--mkdn-link);
+      text-decoration: none;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    .markdown-section a[href^="http"],
+    .markdown-section p a[href*="/"]:not([href*="?id="]),
+    .markdown-section li a[href*="/"]:not([href*="?id="]) {
+      color: #0969da;
+      text-decoration: underline;
+    }
+
+    .markdown-section a[href^="http"]:hover,
+    .markdown-section p a[href*="/"]:not([href*="?id="]):hover,
+    .markdown-section li a[href*="/"]:not([href*="?id="]):hover {
+      color: #0550ae;
+    }
+
+    code {
+      background: var(--mkdn-code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: var(--mkdn-pre-bg);
+      border: 1px solid var(--mkdn-border);
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--mkdn-accent);
+      margin: 1em 0;
+      padding: 0.5em 1em;
+      background: var(--mkdn-bg-alt);
+      border-radius: 0 6px 6px 0;
+    }
+
+    blockquote p { margin: 0.5em 0; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--mkdn-border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--mkdn-bg-alt);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) { background: var(--mkdn-bg-alt); }
+
+    .markdown-section img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 1em 0;
+    }
+
+    .task-list-item { list-style: none; margin: 0.5em 0; }
+    .task-list-item input { margin-right: 8px; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--mkdn-border);
+      margin: 2em 0;
+    }
+
+    /* Copy button fix */
+    .markdown-section pre {
+      position: relative;
+    }
+    .copyCodeButton {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 10;
+      padding: 2px 8px;
+      font-size: 12px;
+      color: var(--mkdn-text-muted);
+      background: var(--mkdn-bg-alt);
+      border: 1px solid var(--mkdn-border);
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .markdown-section pre:hover .copyCodeButton {
+      opacity: 1;
+    }
+
+    .top-actions {
+      position: fixed;
+      top: 16px;
+      right: calc(var(--toc-width) + 45px);
+      display: flex;
+      gap: 4px;
+      z-index: 250;
+    }
+    body.toc-closed .top-actions { right: 20px; }
+    .top-actions button {
+      width: 34px;
+      height: 34px;
+      border: none;
+      border-radius: 6px;
+      background: var(--mkdn-bg-alt);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      color: var(--mkdn-text);
+      transition: background 0.2s, color 0.2s;
+    }
+    .top-actions button:hover {
+      background: var(--mkdn-border);
+      color: var(--mkdn-text);
+    }
+    .top-actions > button svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .top-actions > a button svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      stroke: none;
+    }
+  </style>
+<body>
+  <button class="toc-toggle" onclick="document.body.classList.toggle('toc-closed')" aria-label="Toggle TOC"></button>
+  <div class="top-actions">
+    <button id="theme-toggle" aria-label="Toggle dark mode" title="切换深色/浅色模式">
+      <svg id="theme-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="theme-moon" viewBox="0 0 24 24" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="https://github.com/ATUHSil/RV1106G3_EchoAI" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub 仓库">
+      <button>
+        <svg viewBox="0 0 16 16" fill="currentColor" style="stroke:none"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      </button>
+    </a>
+  </div>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: '  项目文档',
+      homepage: '须知.md',
+      loadSidebar: 'sidebar.md',
+      loadTOC: true,
+      loadNavbar: false,
+      maxLevel: 3,
+      subMaxLevel: 0,
+      themeColor: '#0969da',
+      search: {
+        paths: 'auto',
+        placeholder: '搜索文档...',
+        noData: '未找到结果!',
+        depth: 6
+      },
+      copyCode: {
+        buttonText: '📋',
+        errorText: '错误',
+        successText: '已复制'
+      },
+      count: {
+        countable: true,
+        fontsize: '0.9em',
+        color: 'rgb(90,90,90)',
+        language: 'chinese'
+      },
+      plugins: [
+        function(hook, vm) {
+          hook.beforeEach(function(content) {
+            var createdMatch = content.match(/<!--\s*created:\s*(\d{4}-\d{2}-\d{2})\s*-->/);
+            var updatedMatch = content.match(/<!--\s*updated:\s*(\d{4}-\d{2}-\d{2})\s*-->/);
+            var dateHtml = '<div class="doc-meta">';
+            if (createdMatch) {
+              dateHtml += '<span>创建日期：' + createdMatch[1] + '</span>';
+            }
+            if (updatedMatch) {
+              dateHtml += '<span>修改日期：' + updatedMatch[1] + '</span>';
+            }
+            dateHtml += '</div>';
+            content = content.replace(/<!--\s*created:\s*\d{4}-\d{2}-\d{2}\s*-->/, '').replace(/<!--\s*updated:\s*\d{4}-\d{2}-\d{2}\s*-->/, '');
+            if (createdMatch || updatedMatch) {
+              var h1Match = content.match(/^# .+$/m);
+              if (h1Match) {
+                var h1End = content.indexOf(h1Match[0]) + h1Match[0].length;
+                content = content.slice(0, h1End) + '\n\n' + dateHtml + content.slice(h1End);
+              } else {
+                content = dateHtml + content;
+              }
+            }
+            return content;
+          });
+        },
+        function(hook, vm) {
+          hook.doneEach(function() {
+            var style = document.createElement('style');
+            style.textContent = `
+              .doc-meta {
+                padding: 10px 16px;
+                margin-bottom: 20px;
+                background: var(--mkdn-bg-alt);
+                border-left: 4px solid var(--mkdn-accent);
+                border-radius: 0 6px 6px 0;
+                font-size: 14px;
+                color: var(--mkdn-text);
+              }
+              .doc-meta span { margin-right: 20px; }
+            `;
+            document.head.appendChild(style);
+          });
+        },
+        function(hook) {
+          hook.doneEach(function() {
+            var titles = document.querySelectorAll('.sidebar-nav li > p:not(:has(a))');
+            titles.forEach(function(p) {
+              if (p._navBound) return;
+              p._navBound = true;
+              p.style.cursor = 'pointer';
+              p.addEventListener('click', function() {
+                var firstLink = this.parentElement.querySelector('ul a');
+                if (firstLink) {
+                  window.location.hash = firstLink.getAttribute('href');
+                }
+              });
+            });
+          });
+        },
+        function(hook, vm) {
+          hook.doneEach(function() {
+            var toc = document.querySelector('.toc');
+            if (!toc) {
+              toc = document.createElement('div');
+              toc.className = 'toc';
+              var main = document.querySelector('main');
+              if (main) main.appendChild(toc);
+            }
+            var headings = document.querySelectorAll('.markdown-section h1, .markdown-section h2, .markdown-section h3');
+            var path = window.location.hash.replace(/^#/, '');
+            var html = '<h4>目录</h4><ul>';
+            headings.forEach(function(h) {
+              var level = parseInt(h.tagName.charAt(1));
+              var indent = '  '.repeat(Math.max(0, level - 1));
+              var id = h.id || encodeURIComponent(h.textContent.trim());
+              html += '<li class="toc-l' + level + '"><a href="#' + path + '?id=' + id + '">' + indent + h.textContent + '</a></li>';
+            });
+            html += '</ul>';
+            toc.innerHTML = html;
+          });
+        }
+      ]
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-count@0.3.1/dist/countable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+  <script>
+    (function() {
+      var saved = localStorage.getItem('docsify-theme');
+      if (!saved) { saved = 'dark'; }
+      if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      else document.documentElement.removeAttribute('data-theme');
+      var toggle = document.getElementById('theme-toggle');
+      var sun = document.getElementById('theme-sun');
+      var moon = document.getElementById('theme-moon');
+      function updateIcon() {
+        var isDark = document.documentElement.hasAttribute('data-theme');
+        sun.style.display = isDark ? 'none' : '';
+        moon.style.display = isDark ? '' : 'none';
+      }
+      updateIcon();
+      toggle.addEventListener('click', function() {
+        var isDark = document.documentElement.hasAttribute('data-theme');
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('docsify-theme', 'light');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('docsify-theme', 'dark');
+        }
+        updateIcon();
+      });
+    })();
+  </script>
+</body>
+</html>
